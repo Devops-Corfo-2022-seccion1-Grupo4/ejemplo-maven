@@ -1,27 +1,50 @@
 pipeline {
     agent any
-
-    stages {
-        stage('Build') {
+	stages {
+        stage('Compile') {
             steps {
-                echo 'TODO: build'
+                echo 'Compile..'
                 sh "./mvnw clean compile -e"
             }
+        }
         stage('Test') {
             steps {
-                echo 'Todo: test'
-                sh "./mvnw.cmd clean test -e"
-            }
-        stage('Package') {
-            steps {
-                echo 'TODO: package'
-                sh "./mvnw.cmd clean package -e"
-            }
-        stage('Run') {
-            steps {
-                echo 'TODO: run'
-                sh "nohup bash mvnw.cmd spring-boot:run &"
+                echo 'Testing..'
+				sh "./mvnw clean test -e"
             }
         }
+		stage('Building') {
+            steps {
+                echo 'Testing..'
+				sh "./mvnw clean package -e"
+            }
+        }
+		stage('SonarQube analysis') {
+            steps{
+                withSonarQubeEnv('Sonar') {
+					sh 'mvn clean package sonar:sonar'
+                }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('uploadNexus') {
+            steps {
+                echo 'Uploading Nexus'
+				nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'taller4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
+            }
+        }
+		stage ('Clean'){
+            steps
+                {
+                    cleanWs()
+                }
+        }
+
     }
 }
