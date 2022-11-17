@@ -36,7 +36,7 @@ pipeline {
         stage('uploadNexus') {
             steps {
                 echo 'Uploading Nexus'
-				nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'taller4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '${WORKSPACE}/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
+				nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'taller4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/taller4_ejmaven_feature-nexus/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
             }
         }
 		stage ('Clean'){
