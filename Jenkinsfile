@@ -26,7 +26,7 @@ pipeline {
                 }
             }
         }
-        stage("Quality Gate") {
+        stage('Quality Gate') {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
@@ -37,7 +37,7 @@ pipeline {
 stage('uploadNexus') {
             steps {
                 echo 'Uploading Nexus'
-				nexusPublisher nexusInstanceId: 'nexus1', nexusRepositoryId: 'ejemplo_Maven_taller3_lmrclo', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/Multibranch_lmrclo_feature-nexus/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
+				nexusPublisher nexusInstanceId: 'nsx01', nexusRepositoryId: 'taller4', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/tallerm4-nexus3_feature-nexus/build/DevOpsUsach2020-2.0.0.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '2.0.0']]]
             }
         }
    
